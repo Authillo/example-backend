@@ -1,0 +1,29 @@
+{
+	"name": "example-backend",
+	"version": "1.0.0",
+	"description": "This repository serves as an example backend that handles all the appropriate OIDC steps needed to implement authillo",
+	"main": "index.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Authillo/example-backend.git"
+	},
+	"author": "Authillo",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Authillo/example-backend/issues"
+	},
+	"homepage": "https://github.com/Authillo/example-backend#readme",
+	"dependencies": {
+		"concurrently": "^7.6.0",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"jsonwebtoken": "^9.0.0",
+		"node-fetch": "^2.6.7"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
+	}
+}
