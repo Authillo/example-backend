@@ -11,8 +11,10 @@ const port = 5001;
 const clientId = process.env.CLIENT_ID_PROD;
 const clientSecret = process.env.CLIENT_SECRET_PROD;
 const jwtKey = process.env.JWT_KEY_PROD;
-const redirect_uri = "localhost:3001/redirect";
-let codeVerifier;
+const redirect_uri = "com.authillo.ios-integration-demo://";
+let codeVerifier = "UNSAFECODEVERIFIER";
+// let codeChallenge = "c2a2edfcc102b7604c01c9427d73a755f5c34df7e0039f78425d26e86c04bf44";
+let codeChallenge = "wqLt_MECt2BMAclCfXOnVfXDTffgA594Ql0m6GwEv0Q";
 let accessToken;
 
 app.use(function (req, res, next) {
@@ -24,6 +26,9 @@ app.use(function (req, res, next) {
 });
 app.use(bodyParser.json());
 
+app.get("/hello", (req, res) => {
+	console.log("hello enpoint hit");
+});
 /**
  * 1) Randomly generate a codeVerifier string
  * 2) Generate the codeChallenge by setting it equal to the hash of the codeVerifier using SHA256
@@ -33,15 +38,12 @@ app.use(bodyParser.json());
 app.get("/codechallenge", (req, res) => {
 	codeVerifier = crypto.randomBytes(32).toString("base64url");
 	codeChallenge = crypto.createHash("sha256").update(codeVerifier).digest("base64url");
+	console.log("codechallengecalled");
 	/**
 	 * WARNING - This is an example backend so we don't store these codes using a database & we instead save the values in the codeVerifier & codeChallenge variables respectively.
 	 * In production, your backend would have to store the codeVerifier & codeChallenge in a presistent database
 	 */
-	res.json(
-		JSON.stringify({
-			codeChallenge,
-		})
-	);
+	res.json(`${codeChallenge}`);
 });
 
 /**
@@ -57,6 +59,7 @@ app.get("/codeResponse", async (req, res) => {
 	console.log(req.query);
 	const code = req.query.code;
 	const url = `https://auth.authillo.com/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}&code_verifier=${codeVerifier}&client_id=${clientId}&client_secret=${clientSecret}&request_type=OIDC`;
+	console.log(`url for tokenRequest = ${url}`);
 
 	const tokenRes = await fetch(url, {
 		method: "POST",
